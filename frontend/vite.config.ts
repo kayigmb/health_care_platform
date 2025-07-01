@@ -1,8 +1,16 @@
-import tailwindcss from '@tailwindcss/vite';
-import devtoolsJson from 'vite-plugin-devtools-json';
-import { sveltekit } from '@sveltejs/kit/vite';
-import { defineConfig } from 'vite';
+import {defineConfig} from 'vite'
+import react from '@vitejs/plugin-react'
 
+// https://vite.dev/config/
 export default defineConfig({
-	plugins: [tailwindcss(), sveltekit(), devtoolsJson()]
-});
+    plugins: [react()],
+    build: {
+        outDir: '../frontend/ui/',
+        emptyOutDir: true,
+        rollupOptions: {
+            input: {
+                main: 'index.html'
+            }
+        }
+    }
+})
