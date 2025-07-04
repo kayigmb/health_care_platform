@@ -22,14 +22,14 @@ else
     echo "Keys already exist. Skipping key generation."
 fi
 
-#echo "Create .env file..."
-#
-#if [ ! -f .env ]; then
-#    cp .env.example .env
-#    echo "Please fill in the required values in the .env file."
-#else
-#    echo ".env file already exists. Please ensure it has the correct values."
-#fi
+
+if [ ! -f .env ]; then
+    echo "Create .env file..."
+    cp .env.example .env
+    echo "Please fill in the required values in the .env file."
+else
+    echo ".env file already exists. Please ensure it has the correct values."
+fi
 
 
 echo "Done!"

@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import org.health.Enums.AppointmentStatusEnum;
 
 @Entity
-@Table(name = "appointments")
+@Table(name = "appointments", schema = "health_schema")
 public class AppointmentsEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)
@@ -21,4 +21,44 @@ public class AppointmentsEntity extends BaseEntity {
     private String status = AppointmentStatusEnum.PENDING.toString();
 
     private String service;
+
+    public UsersEntity getApp_patient() {
+        return app_patient;
+    }
+
+    public void setApp_patient(UsersEntity app_patient) {
+        this.app_patient = app_patient;
+    }
+
+    public UsersEntity getApp_doctor() {
+        return app_doctor;
+    }
+
+    public void setApp_doctor(UsersEntity app_doctor) {
+        this.app_doctor = app_doctor;
+    }
+
+    public HospitalsEntity getHospital() {
+        return hospital;
+    }
+
+    public void setHospital(HospitalsEntity hospital) {
+        this.hospital = hospital;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public String getService() {
+        return service;
+    }
+
+    public void setService(String service) {
+        this.service = service;
+    }
 }
