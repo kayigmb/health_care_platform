@@ -1,0 +1,24 @@
+package org.health.entities;
+
+import jakarta.persistence.*;
+import org.health.Enums.AppointmentStatusEnum;
+
+@Entity
+@Table(name = "appointments")
+public class AppointmentsEntity extends BaseEntity {
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "patient_id", nullable = false)
+    private UsersEntity app_patient;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "doctor_id")
+    private UsersEntity app_doctor;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "hospital_id")
+    private HospitalsEntity hospital;
+
+    private String status = AppointmentStatusEnum.PENDING.toString();
+
+    private String service;
+}

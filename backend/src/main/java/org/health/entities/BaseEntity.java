@@ -2,6 +2,7 @@ package org.health.entities;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
 import jakarta.persistence.MappedSuperclass;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
@@ -10,7 +11,8 @@ import java.time.ZonedDateTime;
 import java.util.UUID;
 
 @MappedSuperclass
-public class BaseEntity {
+public abstract class BaseEntity {
+    @Id
     @GeneratedValue
     @Column(nullable = false)
     private UUID id;
