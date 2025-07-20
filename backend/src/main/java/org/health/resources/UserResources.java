@@ -1,5 +1,7 @@
 package org.health.resources;
 
+import io.quarkus.security.Authenticated;
+import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.Path;
@@ -7,20 +9,23 @@ import jakarta.ws.rs.PathParam;
 import jakarta.ws.rs.Produces;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.health.repositories.UsersRepository;
+import org.eclipse.microprofile.jwt.JsonWebToken;
 import org.health.services.UsersServices;
 
 import java.util.UUID;
 
 @Path("/users")
 @Produces(MediaType.APPLICATION_JSON)
+@Authenticated
 public class UserResources {
 
     private final UsersServices usersServices;
+    private final JsonWebToken jwt;
 
     @Inject
-    public UserResources(UsersRepository usersRepository, UsersServices usersServices) {
+    public UserResources(UsersServices usersServices, JsonWebToken jwt) {
         this.usersServices = usersServices;
+        this.jwt = jwt;
     }
 
     @GET
@@ -36,9 +41,9 @@ public class UserResources {
 
     @GET
     @Path("/me")
+    @RolesAllowed({"user", "admin", "doctor"})
     public Response getCurrentUser() {
-        // will wait for the implementation of the authentication service
-        return null;
+        return usersServices.getCurrentUser(UUID.fromString(jwt.getName()));
     }
 
 }

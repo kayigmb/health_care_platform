@@ -33,8 +33,13 @@ public class UsersServices {
         return ResponseBuilder.success("User retrieved successfully", UsersMapper.toDto(user));
     }
 
-    public Response getCurrentUser() {
-        return null;
+    public Response getCurrentUser(UUID userId) {
+        UsersEntity currentUser = usersRepository.findByField("id", userId);
+        if (currentUser == null) {
+            throw new NotFoundError("Current user not found with id: " + userId);
+        }
+        return ResponseBuilder.success("Current user retrieved successfully",
+                UsersMapper.toDto(currentUser));
     }
 
 
