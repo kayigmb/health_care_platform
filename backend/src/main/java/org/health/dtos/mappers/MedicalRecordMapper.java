@@ -1,4 +1,4 @@
-package org.health.mappers;
+package org.health.dtos.mappers;
 
 import org.health.dtos.MedicalRecordDto;
 import org.health.entities.MedicalRecordsEntity;

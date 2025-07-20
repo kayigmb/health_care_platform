@@ -1,4 +1,4 @@
-package org.health.Enums;
+package org.health.enums;
 
 /**
  * Enum representing the status of an appointment.

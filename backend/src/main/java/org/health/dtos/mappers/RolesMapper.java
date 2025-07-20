@@ -1,4 +1,4 @@
-package org.health.mappers;
+package org.health.dtos.mappers;
 
 import org.health.dtos.RolesDto;
 import org.health.entities.RolesEntity;

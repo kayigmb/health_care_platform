@@ -1,7 +1,7 @@
 package org.health.entities;
 
 import jakarta.persistence.*;
-import org.health.Enums.AppointmentStatusEnum;
+import org.health.enums.AppointmentStatusEnum;
 
 @Entity
 @Table(name = "appointments", schema = "health_schema")

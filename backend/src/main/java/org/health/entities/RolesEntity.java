@@ -1,7 +1,6 @@
 package org.health.entities;
 
 import jakarta.persistence.*;
-import org.health.Enums.RolesEnum;
 
 import java.util.List;
 
@@ -9,7 +8,7 @@ import java.util.List;
 @Entity
 public class RolesEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
-    private String name = RolesEnum.USER.toString();  // Default in Java side
+    private String name;
 
     @OneToMany(mappedBy = "role", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<RolesScopeEntity> roleScopes;

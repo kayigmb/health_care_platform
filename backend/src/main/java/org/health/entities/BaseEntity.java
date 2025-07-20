@@ -18,7 +18,7 @@ public abstract class BaseEntity {
     private UUID id;
 
     @Column(name = "is_deleted", nullable = false)
-    private Boolean isDeleted;
+    private Boolean isDeleted = Boolean.FALSE;
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
