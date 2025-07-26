@@ -85,4 +85,18 @@ public class AppointmentResources {
             return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
     }
+
+    @PATCH
+    @Path("/{id}/status")
+    @RolesAllowed({"admin", "doctor"})
+    public Response updateAppointmentStatus(@PathParam("id") UUID id, @QueryParam("status") String status) {
+        try {
+            return ResponseBuilder.success("Appointment status updated successfully",
+                    appointmentsServices.updateAppointmentsStatus(id, status));
+        } catch (NotFoundError e) {
+            return ResponseBuilder.error(Response.Status.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
 }

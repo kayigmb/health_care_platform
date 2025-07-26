@@ -8,5 +8,19 @@ public enum AppointmentStatusEnum {
     PENDING,
     CONFIRMED,
     CANCELLED,
-    COMPLETED
+    COMPLETED;
+
+    public static boolean contains(String status) {
+        for (AppointmentStatusEnum appointmentStatus : AppointmentStatusEnum.values()) {
+            if (appointmentStatus.name().equalsIgnoreCase(status)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    @Override
+    public String toString() {
+        return name().toLowerCase();
+    }
 }

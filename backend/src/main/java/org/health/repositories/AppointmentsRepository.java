@@ -12,9 +12,6 @@ import java.util.UUID;
 
 @ApplicationScoped
 public class AppointmentsRepository implements PanacheRepository<AppointmentsEntity> {
-    private AppointmentsRepository() {
-    }
-
     public List<AppointmentsEntity> findAllAppointments() {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<AppointmentsEntity> query = cb.createQuery(AppointmentsEntity.class);

@@ -9,6 +9,7 @@ import org.health.dtos.request.AppointmentRequestDTO;
 import org.health.entities.AppointmentsEntity;
 import org.health.entities.HospitalsEntity;
 import org.health.entities.UsersEntity;
+import org.health.enums.AppointmentStatusEnum;
 import org.health.exceptions.ExistingError;
 import org.health.exceptions.NotFoundError;
 import org.health.repositories.AppointmentsRepository;
@@ -105,6 +106,19 @@ public class AppointmentsServices {
             throw new ExistingError("Appointment not found with ID: " + id);
         }
         existingAppointment.setDeleted(true);
+        return AppointmentsMapper.toDto(existingAppointment);
+    }
+
+    @Transactional
+    public AppointmentDto updateAppointmentsStatus(UUID id, String status) throws NotFoundError {
+        AppointmentsEntity existingAppointment = appointmentsRepository.findById(id);
+        if (existingAppointment == null) {
+            throw new NotFoundError("Appointment not found with ID: " + id);
+        }
+        if (!AppointmentStatusEnum.contains(status)) {
+            throw new NotFoundError("Invalid status: " + status);
+        }
+        existingAppointment.setStatus(status);
         return AppointmentsMapper.toDto(existingAppointment);
     }
 }
