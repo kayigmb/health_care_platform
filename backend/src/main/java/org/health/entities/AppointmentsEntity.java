@@ -3,6 +3,8 @@ package org.health.entities;
 import jakarta.persistence.*;
 import org.health.enums.AppointmentStatusEnum;
 
+import java.time.ZonedDateTime;
+
 @Entity
 @Table(name = "appointments", schema = "health_schema")
 public class AppointmentsEntity extends BaseEntity {
@@ -21,6 +23,26 @@ public class AppointmentsEntity extends BaseEntity {
     private String status = AppointmentStatusEnum.PENDING.toString();
 
     private String service;
+
+    private ZonedDateTime appointmentDate;
+
+    private String reason;
+
+    public ZonedDateTime getAppointmentDate() {
+        return appointmentDate;
+    }
+
+    public void setAppointmentDate(ZonedDateTime appointmentDate) {
+        this.appointmentDate = appointmentDate;
+    }
+
+    public String getReason() {
+        return reason;
+    }
+
+    public void setReason(String reason) {
+        this.reason = reason;
+    }
 
     public UsersEntity getApp_patient() {
         return app_patient;

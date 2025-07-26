@@ -1,5 +1,6 @@
 package org.health.resources;
 
+import io.quarkus.security.Authenticated;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
@@ -10,9 +11,10 @@ import org.health.utils.ResponseBuilder;
 
 import java.util.UUID;
 
-@Path("/roles-scope")
+@Path("/roles-scopes")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
+@Authenticated
 public class RolesScopeResources {
 
     private final RolesScopeServices rolesScopeServices;

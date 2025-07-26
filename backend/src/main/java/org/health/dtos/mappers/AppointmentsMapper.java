@@ -1,9 +1,36 @@
 package org.health.dtos.mappers;
 
 import org.health.dtos.AppointmentDto;
+import org.health.dtos.request.AppointmentRequestDTO;
 import org.health.entities.AppointmentsEntity;
+import org.health.entities.HospitalsEntity;
+import org.health.entities.UsersEntity;
 
 public class AppointmentsMapper {
+    private AppointmentsMapper() {
+    }
+
+    public static AppointmentsEntity toEntity(AppointmentRequestDTO dto) {
+        AppointmentsEntity entity = new AppointmentsEntity();
+        // Add patient
+        UsersEntity patient = new UsersEntity();
+        patient.setId(dto.patientId());
+        entity.setApp_patient(patient);
+        // Add doctor
+        UsersEntity doctor = new UsersEntity();
+        doctor.setId(dto.doctorId());
+        entity.setApp_doctor(doctor);
+        // Add hospital
+        HospitalsEntity hospital = new HospitalsEntity();
+        hospital.setId(dto.hospitalId());
+        entity.setHospital(hospital);
+        // Set other fields
+        entity.setAppointmentDate(dto.appointmentDate());
+        entity.setService(dto.service());
+        entity.setReason(dto.reason());
+        return entity;
+    }
+
     public static AppointmentDto toDto(AppointmentsEntity entity) {
         return new AppointmentDto(
                 entity.getId(),

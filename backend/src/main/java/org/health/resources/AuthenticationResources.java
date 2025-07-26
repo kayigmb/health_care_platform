@@ -6,6 +6,7 @@ import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.Response;
 import org.health.dtos.request.LoginRequestDTO;
 import org.health.dtos.request.RegisterUserRequestDTO;
+import org.health.exceptions.NotFoundError;
 import org.health.services.AuthenticationServices;
 import org.health.utils.ResponseBuilder;
 
@@ -23,7 +24,8 @@ public class AuthenticationResources {
     @POST
     public Response register(RegisterUserRequestDTO request) {
         try {
-            return authenticationServices.registerUser(request);
+            return ResponseBuilder.success("User successfully added",
+                    authenticationServices.registerUser(request));
         } catch (Exception e) {
             return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }
@@ -33,7 +35,13 @@ public class AuthenticationResources {
     @POST
     public Response login(LoginRequestDTO request) {
         try {
-            return authenticationServices.loginService(request);
+            return ResponseBuilder.success("Successfully logged in",
+                    authenticationServices.loginService(request));
+        } catch (NotFoundError e) {
+            return ResponseBuilder.error(Response.Status.UNAUTHORIZED, e.getMessage());
+        } catch (RuntimeException e) {
+            return ResponseBuilder.error(Response.Status.UNAUTHORIZED,
+                    e.getMessage());
         } catch (Exception e) {
             return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }

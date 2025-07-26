@@ -20,7 +20,11 @@ public class RolesScopesRepository implements PanacheRepository<RolesScopeEntity
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<RolesScopeEntity> query = cb.createQuery(RolesScopeEntity.class);
         Root<RolesScopeEntity> root = query.from(RolesScopeEntity.class);
-        query.select(root).where(cb.equal(root.get("id"), id));
+
+        Predicate idPredicate = cb.equal(root.get("id"), id);
+        Predicate notDeletedPredicate = cb.equal(root.get("isDeleted"), false);
+
+        query.select(root).where(cb.and(idPredicate, notDeletedPredicate));
         return getEntityManager().createQuery(query).getResultStream().findFirst().orElse(null);
     }
 
@@ -41,6 +45,8 @@ public class RolesScopesRepository implements PanacheRepository<RolesScopeEntity
         if (request.hospitalId().isPresent()) {
             predicates.add(cb.equal(root.get("hospital").get("id"), request.hospitalId()));
         }
+
+        predicates.add(cb.equal(root.get("isDeleted"), false));
         query.where(predicates.toArray(new Predicate[0]));
         return getEntityManager().createQuery(query).getResultStream().findFirst();
     }

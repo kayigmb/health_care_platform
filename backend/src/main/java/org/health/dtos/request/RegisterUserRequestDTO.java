@@ -7,5 +7,6 @@ public record RegisterUserRequestDTO(
         String lastName,
         String email,
         String password,
-        Optional<String> phone) {
+        Optional<String> phone
+) {
 }

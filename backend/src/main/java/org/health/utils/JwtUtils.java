@@ -30,6 +30,7 @@ public class JwtUtils {
                 .map(RolesScopeEntity::getRole)
                 .map(RolesEntity::getName)
                 .collect(Collectors.toSet());
+
         return Jwt.issuer(issuer)
                 .upn(user.getId().toString())
                 .groups(groups)

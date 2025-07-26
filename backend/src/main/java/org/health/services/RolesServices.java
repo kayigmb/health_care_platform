@@ -1,13 +1,15 @@
-package org.health.resources;
+package org.health.services;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.core.Response;
+import org.health.dtos.RolesDto;
 import org.health.dtos.mappers.RolesMapper;
 import org.health.entities.RolesEntity;
 import org.health.repositories.RolesRepository;
 import org.health.utils.ResponseBuilder;
 
+import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -19,9 +21,10 @@ public class RolesServices {
         this.rolesRepository = rolesRepository;
     }
 
-    public Response getAllRoles() {
-        return ResponseBuilder.success("Roles retrieved successfully",
-                rolesRepository.findAll().stream().map(RolesMapper::toDto).toList());
+    public List<RolesDto> getAllRoles() {
+        return rolesRepository.findAll().stream()
+                .map(RolesMapper::toDto)
+                .toList();
     }
 
     public Response getRoleById(UUID id) {

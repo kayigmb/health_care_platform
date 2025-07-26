@@ -3,7 +3,7 @@ package org.health.services;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
-import jakarta.ws.rs.core.Response;
+import org.health.dtos.UsersDto;
 import org.health.dtos.mappers.UsersMapper;
 import org.health.dtos.request.LoginRequestDTO;
 import org.health.dtos.request.RegisterUserRequestDTO;
@@ -18,7 +18,6 @@ import org.health.repositories.RolesScopesRepository;
 import org.health.repositories.UsersRepository;
 import org.health.utils.JwtUtils;
 import org.health.utils.PasswordHashUtils;
-import org.health.utils.ResponseBuilder;
 
 import java.util.Optional;
 
@@ -37,7 +36,7 @@ public class AuthenticationServices {
     }
 
     @Transactional
-    public Response registerUser(RegisterUserRequestDTO userInfo) {
+    public UsersDto registerUser(RegisterUserRequestDTO userInfo) {
         UsersEntity existingUserEmail = usersRepository.findByField("email", userInfo.email());
         if (existingUserEmail != null) {
             throw new ExistingError("User with this email already exists.");
@@ -63,19 +62,19 @@ public class AuthenticationServices {
         rolesScopeUser.setUser(newUser);
         rolesScopeUser.setRole(userRole.get());
         rolesScopesRepository.persist(rolesScopeUser);
-
-        return ResponseBuilder.success("User registered successfully", UsersMapper.toDto(newUser));
+        return UsersMapper.toDto(newUser);
     }
 
-    public Response loginService(LoginRequestDTO loginRequest) {
+    public String loginService(LoginRequestDTO loginRequest) throws NotFoundError, RuntimeException {
+        String loginFail = "Username or password is incorrect.";
         UsersEntity existingUser = usersRepository.findByField("email", loginRequest.email());
         if (existingUser == null) {
-            throw new NotFoundError("Username or password is incorrect.");
+            throw new NotFoundError(loginFail);
         }
         if (!PasswordHashUtils.checkPassword(loginRequest.password(), existingUser.getPasswordHash())) {
-            return ResponseBuilder.error(Response.Status.UNAUTHORIZED, "Username or password is incorrect.");
+            throw new RuntimeException(loginFail);
         }
-        return ResponseBuilder.success("Login successful", JwtUtils.generateToken(existingUser));
+        return JwtUtils.generateToken(existingUser);
     }
 
 }
