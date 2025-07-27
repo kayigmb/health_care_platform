@@ -1,8 +1,18 @@
+import { Header } from "../../components/Header.tsx";
+import { Box } from "@mui/material";
+import { HeroPage } from "./Heropage.tsx";
+import { AboutSection } from "./AboutSection.tsx";
+import { ContactSection } from "./ContactSection.tsx";
+import { Footer } from "./Footer.tsx";
+
 export function MainPage() {
-    return (
-        <div className="home-page">
-            <h1>Home Page</h1>
-            <p>Welcome to the home page! This is the starting point of our application.</p>
-        </div>
-    )
+  return (
+    <Box>
+      <Header />
+      <HeroPage />
+      <AboutSection />
+      <ContactSection />
+      <Footer />
+    </Box>
+  );
 }

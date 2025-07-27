@@ -1,43 +1,91 @@
-import {Box, Button, Link, TextField, Typography} from "@mui/material";
-import React from "react";
-import {Link as RouterLink} from "react-router";
-import {RoutesNames} from "../../utils/RoutesNames.ts";
+import { Box, Button, Link, TextField, Typography } from "@mui/material";
+import { Link as RouterLink, useNavigate } from "react-router";
+import { APIRoutesNames, RoutesNames } from "../../utils/RoutesNames.ts";
+import { useFormHandler } from "../../hooks/useFormHandler";
+import type { LoginForm } from "../../types/Types.ts";
+import PasswordInput from "../../components/PasswordInput.tsx";
+import { useFetch } from "../../hooks/useFetch.ts";
+import { useToast } from "../../contexts/ToastContext.tsx";
+import { LocalStorageStores, setToLocalStorage } from "../../utils/manageLocalStorage.ts";
 
 export function LoginPage() {
-    function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-        event.preventDefault();
-        console.log("Login form submitted");
+  const { fetchData } = useFetch<string, LoginForm>();
+  const { showToast } = useToast();
+  const navigate = useNavigate();
+
+  const { handleSubmit, errors } = useFormHandler<LoginForm>({
+    validate: (values) => {
+      const errors: Partial<Record<keyof LoginForm, string>> = {};
+
+      if (!values.email) {
+        errors.email = "Email is required";
+      }
+
+      if (!values.password) {
+        errors.password = "Password is required";
+      }
+
+      return errors;
+    },
+    onSubmit: async (values: LoginForm) => {
+      const res = await fetchData({
+        url: APIRoutesNames.LOGIN,
+        method: "POST",
+        body: values
+      });
+
+      // work on the data
+      if (res !== null) {
+        showToast("Login successful", "success");
+        setToLocalStorage(LocalStorageStores.TOKEN, res);
+        navigate(RoutesNames.HOME, { replace: true });
+        return;
+      }
     }
+  });
 
-    return (
-        <Box
-            component="form"
-            onSubmit={handleSubmit}
-            sx={{
-                display: "flex",
-                flexDirection: "column",
-                gap: 2,
-                width: "100%",
-            }}
-        >
-            <Typography variant="h3" align="center">
-                Login
-            </Typography>
+  return (
+    <Box
+      component="form"
+      onSubmit={handleSubmit}
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        gap: 2,
+        width: "100%"
+      }}
+    >
+      <Typography variant="h3" align="center">
+        Login
+      </Typography>
 
-            <TextField label="Email" type="email" required fullWidth/>
+      <TextField
+        label="Email"
+        name="email"
+        type="text"
+        required
+        error={!!errors.email}
+        helperText={errors.email}
+        fullWidth
+      />
 
-            <TextField label="Password" type="password" required fullWidth/>
+      <PasswordInput
+        name={"password"}
+        label="Password"
+        error={!!errors.password}
+        helperText={errors.password}
+      />
 
-            <Button type="submit" variant="contained" fullWidth>
-                Sign In
-            </Button>
+      <Button type="submit" variant="contained" fullWidth>
+        Sign In
+      </Button>
 
-            <Typography variant="subtitle1" align="center">
-                Don't have an account yet? {" "}
-                <Link component={RouterLink} to={RoutesNames.REGISTER} underline="hover">
-                    Register
-                </Link>
-            </Typography>
-        </Box>
-    );
+      <Typography variant="subtitle1" align="center">
+        Don't have an account yet?{" "}
+        <Link component={RouterLink} to={RoutesNames.REGISTER} underline="hover">
+          Register
+        </Link>
+      </Typography>
+    </Box>
+  );
 }

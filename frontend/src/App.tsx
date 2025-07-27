@@ -1,9 +1,12 @@
 import Routes from "./routes/Routes.tsx";
+import { ToastProvider } from "./contexts/ToastContext.tsx";
 
 function App() {
-    return (
-        <Routes/>
-    )
+  return (
+    <ToastProvider>
+      <Routes />
+    </ToastProvider>
+  );
 }
 
-export default App
+export default App;
