@@ -6,6 +6,7 @@ import { getFromLocalStorage, LocalStorageStores } from "../utils/manageLocalSto
 
 interface UserContextType {
   user: UserType | null;
+  roles: string[];
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -13,6 +14,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 export function UserContextProvider({ children }: Readonly<{ children: React.ReactNode }>) {
   const [user, setUser] = useState<UserType | null>(null);
   const { fetchData } = useFetch<UserType>();
+  const [roles, _] = useState<string[]>([]);
 
   async function getUserData() {
     const res = await fetchData({
@@ -35,7 +37,8 @@ export function UserContextProvider({ children }: Readonly<{ children: React.Rea
 
   const value = useMemo<UserContextType>(
     () => ({
-      user
+      user,
+      roles
     }),
     [user]
   );

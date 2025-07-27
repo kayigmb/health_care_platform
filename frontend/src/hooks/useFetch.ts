@@ -2,7 +2,11 @@ import { useCallback, useState } from "react";
 import type { ApiResultFormat } from "../types/ApiResultFormat.ts";
 import { useToast } from "../contexts/ToastContext.tsx";
 import { type APIRoutesNames, RoutesNames } from "../utils/RoutesNames.ts";
-import { getFromLocalStorage, LocalStorageStores } from "../utils/manageLocalStorage.ts";
+import {
+  getFromLocalStorage,
+  LocalStorageStores,
+  removeFromLocalStorage
+} from "../utils/manageLocalStorage.ts";
 import { useNavigate } from "react-router";
 
 type FetchMethod = "GET" | "POST" | "PUT" | "PATCH" | "DELETE";
@@ -33,44 +37,45 @@ export function useFetch<TResultType, TBodyType = undefined>() {
       headers["Authorization"] = `Bearer ${getFromLocalStorage(LocalStorageStores.TOKEN)}`;
     }
 
-    try {
-      const response: Response = await fetch(url as string, {
-        method,
-        headers,
-        body: method !== "GET" ? JSON.stringify(body) : undefined,
-        credentials: "include"
+    return fetch(url as string, {
+      method,
+      headers,
+      body: method !== "GET" ? JSON.stringify(body) : undefined
+    })
+      .then((res) => {
+        setLoading(false);
+        if (!res.ok) {
+          if (res.status === 401) {
+            showToast("Unauthorized access. Please log in again.", "error");
+            removeFromLocalStorage(LocalStorageStores.TOKEN);
+            return navigate(RoutesNames.LOGIN);
+          } else if (res.status === 403) {
+            showToast(
+              "Forbidden access. You do not have permission to perform this action.",
+              "error"
+            );
+            return navigate(RoutesNames.HOME);
+          }
+        }
+        return res.json();
+      })
+      .then((data: ApiResultFormat<TResultType>) => {
+        setLoading(false);
+        if (data.status === "success") {
+          setData(data.data ?? null);
+          return data.data;
+        } else {
+          showToast(data.message ?? "Something went wrong", "error");
+        }
+      })
+      .catch((err) => {
+        console.error("Fetch error:", err);
+        showToast(err instanceof Error ? err.message : "Unknown error", "error");
+        setLoading(false);
+      })
+      .finally(() => {
+        setLoading(false);
       });
-
-      if (!response.ok) {
-        const errorData: ApiResultFormat<null> = await response.json();
-        showToast(errorData.message ?? "Something went wrong", "error");
-        return null;
-      }
-
-      if (!response.ok && response.status === 401) {
-        showToast("Unauthorized access. Please log in again.", "error");
-        return navigate(RoutesNames.LOGIN);
-      }
-
-      if (!response.ok && response.status === 403) {
-        showToast("Forbidden access. You do not have permission to perform this action.", "error");
-        return navigate(RoutesNames.HOME);
-      }
-
-      const data: ApiResultFormat<TResultType> = await response.json();
-
-      if (response.ok && data.status === "success") {
-        setData(data.data ?? null);
-        return data.data;
-      } else {
-        showToast(data.message ?? "Something went wrong", "error");
-      }
-    } catch (err) {
-      console.log("Fetch error:", err);
-      showToast(err instanceof Error ? err.message : "Unknown error", "error");
-    } finally {
-      setLoading(false);
-    }
   }, []);
 
   return { data, message, loading, fetchData };
