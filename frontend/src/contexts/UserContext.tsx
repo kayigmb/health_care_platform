@@ -1,20 +1,20 @@
 import React, { createContext, useContext, useEffect, useMemo, useState } from "react";
-import type { UserType } from "../types/Types.ts";
+import type { UserShortType, UserType } from "../types/Types.ts";
 import { useFetch } from "../hooks/useFetch.ts";
 import { APIRoutesNames } from "../utils/RoutesNames.ts";
 import { getFromLocalStorage, LocalStorageStores } from "../utils/manageLocalStorage.ts";
 
 interface UserContextType {
-  user: UserType | null;
+  user: UserShortType | null;
   roles: string[];
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
 
 export function UserContextProvider({ children }: Readonly<{ children: React.ReactNode }>) {
-  const [user, setUser] = useState<UserType | null>(null);
+  const [user, setUser] = useState<UserShortType | null>(null);
   const { fetchData } = useFetch<UserType>();
-  const [roles, _] = useState<string[]>([]);
+  const [roles, setRoles] = useState<string[]>([]);
 
   async function getUserData() {
     const res = await fetchData({
@@ -22,7 +22,8 @@ export function UserContextProvider({ children }: Readonly<{ children: React.Rea
     });
 
     if (res !== null) {
-      setUser(res!);
+      setUser(res?.user!);
+      setRoles(res!.roles || []);
       return res;
     }
     return null;

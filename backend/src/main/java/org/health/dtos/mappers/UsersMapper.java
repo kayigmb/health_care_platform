@@ -1,5 +1,6 @@
 package org.health.dtos.mappers;
 
+import org.health.dtos.UserFullDTO;
 import org.health.dtos.UsersDto;
 import org.health.dtos.request.RegisterUserRequestDTO;
 import org.health.entities.UsersEntity;
@@ -32,6 +33,14 @@ public class UsersMapper {
                 user.getDeleted(),
                 user.getCreatedAt(),
                 user.getUpdatedAt()
+        );
+    }
+
+    public static UserFullDTO toFullDto(UsersEntity user) {
+        return new UserFullDTO(
+                toDto(user),
+                user.getRoleScopes().stream().map(role -> role.getRole().getName())
+                        .toArray(String[]::new)
         );
     }
 }

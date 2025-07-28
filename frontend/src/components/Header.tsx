@@ -14,9 +14,9 @@ import {
 import { Link as RouterLink, useNavigate } from "react-router";
 import { RoutesNames } from "../utils/RoutesNames.ts";
 import {
+  clearLocalStorage,
   getFromLocalStorage,
-  LocalStorageStores,
-  removeFromLocalStorage
+  LocalStorageStores
 } from "../utils/manageLocalStorage.ts";
 import { useUserContext } from "../contexts/UserContext.tsx";
 
@@ -37,7 +37,7 @@ export function Header() {
   function handleLogout() {
     // Handle logout logic here
     handleMenuClose();
-    removeFromLocalStorage(LocalStorageStores.TOKEN);
+    clearLocalStorage();
   }
 
   function handleGotoDashboard() {

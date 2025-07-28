@@ -54,3 +54,14 @@ export function removeFromLocalStorage(key: LocalStorageKey): void {
     console.error("Error removing from local storage", error);
   }
 }
+
+/**
+ * Clears all items from local storage.
+ */
+export function clearLocalStorage(): void {
+  try {
+    localStorage.clear();
+  } catch (error) {
+    console.error("Error clearing local storage", error);
+  }
+}

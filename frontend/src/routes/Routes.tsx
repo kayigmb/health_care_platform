@@ -8,9 +8,9 @@ import { LayoutPage } from "../views/LayoutPage/LayoutPage.tsx";
 import { ProtectedRoutes } from "./ProtectedRoutes.tsx";
 import { MainPage } from "../views/MainPage/MainPage.tsx";
 import { AuthLayoutPage } from "./AuthLayoutPage.tsx";
-import { UsersPages } from "../views/UsersPages/UsersPages.tsx";
-import { DoctorsPages } from "../views/DoctorsPages/DoctorsPages.tsx";
-import { AdminPages } from "../views/AdminPages/AdminPages.tsx";
+import { UsersPages } from "../views/Dashboards/UsersPages/UsersPages.tsx";
+import { DoctorsPages } from "../views/Dashboards/DoctorsPages/DoctorsPages.tsx";
+import { AdminPages } from "../views/Dashboards/AdminPages/AdminPages.tsx";
 
 const Routes: React.FC = () => {
   const routers = createBrowserRouter(

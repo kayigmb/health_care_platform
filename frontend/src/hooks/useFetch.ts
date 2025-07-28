@@ -3,9 +3,9 @@ import type { ApiResultFormat } from "../types/ApiResultFormat.ts";
 import { useToast } from "../contexts/ToastContext.tsx";
 import { type APIRoutesNames, RoutesNames } from "../utils/RoutesNames.ts";
 import {
+  clearLocalStorage,
   getFromLocalStorage,
-  LocalStorageStores,
-  removeFromLocalStorage
+  LocalStorageStores
 } from "../utils/manageLocalStorage.ts";
 import { useNavigate } from "react-router";
 
@@ -47,7 +47,7 @@ export function useFetch<TResultType, TBodyType = undefined>() {
         if (!res.ok) {
           if (res.status === 401) {
             showToast("Unauthorized access. Please log in again.", "error");
-            removeFromLocalStorage(LocalStorageStores.TOKEN);
+            clearLocalStorage();
             return navigate(RoutesNames.LOGIN);
           } else if (res.status === 403) {
             showToast(

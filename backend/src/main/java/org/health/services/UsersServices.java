@@ -48,7 +48,7 @@ public class UsersServices {
             throw new NotFoundError("Current user not found with id: " + userId);
         }
         return ResponseBuilder.success("Current user retrieved successfully",
-                UsersMapper.toDto(currentUser));
+                UsersMapper.toFullDto(currentUser));
     }
 
     public List<AppointmentDto> getUserAppointments(UUID userId) throws NotFoundError {

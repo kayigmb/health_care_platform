@@ -11,7 +11,7 @@ export type LoginForm = {
   password: string;
 };
 
-export interface UserType {
+export interface UserShortType {
   id: string;
   firstName: string;
   lastName: string;
@@ -21,4 +21,9 @@ export interface UserType {
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface UserType {
+  user: UserShortType;
+  roles: string[];
 }
