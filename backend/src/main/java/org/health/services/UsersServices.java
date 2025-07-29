@@ -25,9 +25,9 @@ public class UsersServices {
         this.usersRepository = usersRepository;
     }
 
-    public Response getAllUsers() {
+    public Response getAllUsers(String role) {
         return ResponseBuilder.success("Users list fetched successfully",
-                usersRepository.findAll()
+                usersRepository.findAllActiveUsers(role)
                         .stream()
                         .map(UsersMapper::toDto)
                         .toList());

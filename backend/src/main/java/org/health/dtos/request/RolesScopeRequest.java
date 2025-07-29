@@ -9,3 +9,4 @@ public record RolesScopeRequest(
         Optional<UUID> hospitalId
 ) {
 }
+

@@ -7,11 +7,13 @@ import PasswordInput from "../../components/PasswordInput.tsx";
 import { useFetch } from "../../hooks/useFetch.ts";
 import { useToast } from "../../contexts/ToastContext.tsx";
 import { LocalStorageStores, setToLocalStorage } from "../../utils/manageLocalStorage.ts";
+import { useUserContext } from "../../contexts/UserContext.tsx";
 
 export function LoginPage() {
   const { fetchData } = useFetch<string, LoginForm>();
   const { showToast } = useToast();
   const navigate = useNavigate();
+  const { getUserData } = useUserContext();
 
   const { handleSubmit, errors } = useFormHandler<LoginForm>({
     validate: (values) => {
@@ -39,7 +41,10 @@ export function LoginPage() {
         showToast("Login successful", "success");
         setToLocalStorage(LocalStorageStores.TOKEN, res);
         navigate(RoutesNames.HOME, { replace: true });
-        return;
+        getUserData ? await getUserData() : null;
+        if (getUserData) {
+          await getUserData();
+        }
       }
     }
   });

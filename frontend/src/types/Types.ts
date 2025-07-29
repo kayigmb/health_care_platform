@@ -1,3 +1,5 @@
+import React from "react";
+
 export type RegisterForm = {
   firstName: string;
   lastName: string;
@@ -10,6 +12,24 @@ export type LoginForm = {
   email: string;
   password: string;
 };
+
+export interface RoleType {
+  id: string;
+  name: string;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface HospitalType {
+  id: string;
+  name: string;
+  address: string;
+  phoneNumber: string;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface UserShortType {
   id: string;
@@ -26,4 +46,27 @@ export interface UserShortType {
 export interface UserType {
   user: UserShortType;
   roles: string[];
+}
+
+export interface BaseItem {
+  id: string;
+}
+
+export interface ColumnProps<T extends BaseItem> {
+  title?: string;
+  value: keyof T;
+  renderCell?: (item: T, column: ColumnProps<T>) => React.ReactNode;
+  renderHeaderCell?: () => React.ReactNode;
+}
+
+export const TableVariants = {
+  DEFAULT: "default",
+  SECONDARY: "secondary_table"
+} as const;
+
+export interface TableProps<T extends BaseItem> {
+  data: T[];
+  columns: ColumnProps<T>[];
+  pagination?: boolean;
+  variant?: (typeof TableVariants)[keyof typeof TableVariants];
 }

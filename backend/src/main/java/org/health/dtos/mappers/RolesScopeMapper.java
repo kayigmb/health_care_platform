@@ -20,13 +20,16 @@ public class RolesScopeMapper {
         role.setId(rolesScopeRequest.roleId());
         rolesScopeEntity.setRole(role);
 
-        if (rolesScopeRequest.hospitalId().isPresent()) {
+
+        rolesScopeRequest.hospitalId().ifPresent(hospitalId -> {
             HospitalsEntity hospital = new HospitalsEntity();
-            hospital.setId(rolesScopeRequest.hospitalId().get());
+            hospital.setId(hospitalId);
             rolesScopeEntity.setHospital(hospital);
-        }
+        });
+
         return rolesScopeEntity;
     }
+
 
     public static RolesScopeDto toDto(RolesScopeEntity entity) {
         return new RolesScopeDto(

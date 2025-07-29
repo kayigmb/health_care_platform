@@ -13,18 +13,14 @@ import {
 } from "@mui/material";
 import { Link as RouterLink, useNavigate } from "react-router";
 import { RoutesNames } from "../utils/RoutesNames.ts";
-import {
-  clearLocalStorage,
-  getFromLocalStorage,
-  LocalStorageStores
-} from "../utils/manageLocalStorage.ts";
+import { getFromLocalStorage, LocalStorageStores } from "../utils/manageLocalStorage.ts";
 import { useUserContext } from "../contexts/UserContext.tsx";
 
 export function Header() {
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
   const isAuthenticated = getFromLocalStorage(LocalStorageStores.TOKEN) !== null;
-  const { user } = useUserContext();
+  const { user, logOut, roles } = useUserContext();
 
   const handleAvatarClick = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -37,12 +33,9 @@ export function Header() {
   function handleLogout() {
     // Handle logout logic here
     handleMenuClose();
-    clearLocalStorage();
-  }
-
-  function handleGotoDashboard() {
-    // Navigate to the dashboard
-    handleMenuClose();
+    if (logOut) {
+      logOut();
+    }
   }
 
   const scrollToSection = (id: string) => {
@@ -51,6 +44,19 @@ export function Header() {
       section.scrollIntoView({ behavior: "smooth" });
     }
   };
+
+  function handleGotoDashboard() {
+    handleMenuClose();
+    if (roles.includes("admin")) {
+      navigate(RoutesNames.PROTECTED_ADMIN());
+    } else if (roles.includes("doctor")) {
+      navigate(RoutesNames.PROTECTED_DOCTORS());
+    } else if (roles.includes("user")) {
+      navigate(RoutesNames.PROTECTED_USERS());
+    } else {
+      navigate(RoutesNames.HOME);
+    }
+  }
 
   return (
     <Box sx={{ flexGrow: 1 }}>

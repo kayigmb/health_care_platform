@@ -3,10 +3,7 @@ package org.health.resources;
 import io.quarkus.security.Authenticated;
 import jakarta.annotation.security.RolesAllowed;
 import jakarta.inject.Inject;
-import jakarta.ws.rs.GET;
-import jakarta.ws.rs.Path;
-import jakarta.ws.rs.PathParam;
-import jakarta.ws.rs.Produces;
+import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.eclipse.microprofile.jwt.JsonWebToken;
@@ -32,8 +29,10 @@ public class UserResources {
     }
 
     @GET
-    public Response getAllUsers() {
-        return usersServices.getAllUsers();
+    public Response getAllUsers(
+            @QueryParam("role") String role
+    ) {
+        return usersServices.getAllUsers(role);
     }
 
     @GET

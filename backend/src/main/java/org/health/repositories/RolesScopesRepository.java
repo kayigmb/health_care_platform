@@ -43,7 +43,7 @@ public class RolesScopesRepository implements PanacheRepository<RolesScopeEntity
         }
 
         if (request.hospitalId().isPresent()) {
-            predicates.add(cb.equal(root.get("hospital").get("id"), request.hospitalId()));
+            predicates.add(cb.equal(root.get("hospital").get("id"), request.hospitalId().get()));
         }
 
         predicates.add(cb.equal(root.get("isDeleted"), false));

@@ -2,11 +2,17 @@ import React, { createContext, useContext, useEffect, useMemo, useState } from "
 import type { UserShortType, UserType } from "../types/Types.ts";
 import { useFetch } from "../hooks/useFetch.ts";
 import { APIRoutesNames } from "../utils/RoutesNames.ts";
-import { getFromLocalStorage, LocalStorageStores } from "../utils/manageLocalStorage.ts";
+import {
+  clearLocalStorage,
+  getFromLocalStorage,
+  LocalStorageStores
+} from "../utils/manageLocalStorage.ts";
 
 interface UserContextType {
   user: UserShortType | null;
   roles: string[];
+  logOut: () => void;
+  getUserData: () => Promise<UserType | null | void>;
 }
 
 const UserContext = createContext<UserContextType | undefined>(undefined);
@@ -39,9 +45,17 @@ export function UserContextProvider({ children }: Readonly<{ children: React.Rea
   const value = useMemo<UserContextType>(
     () => ({
       user,
-      roles
+      roles,
+      logOut: () => {
+        setUser(null);
+        setRoles([]);
+        clearLocalStorage();
+      },
+      getUserData: async () => {
+        return await getUserData();
+      }
     }),
-    [user]
+    [user, roles, getUserData]
   );
 
   return <UserContext.Provider value={value}>{children}</UserContext.Provider>;
