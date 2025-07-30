@@ -37,7 +37,7 @@ export function useFetch<TResultType, TBodyType = undefined>() {
       headers["Authorization"] = `Bearer ${getFromLocalStorage(LocalStorageStores.TOKEN)}`;
     }
 
-    return fetch(url as string, {
+    return fetch(`/api${url as string}`, {
       method,
       headers,
       body: method !== "GET" ? JSON.stringify(body) : undefined

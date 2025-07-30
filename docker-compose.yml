@@ -1,0 +1,30 @@
+services:
+  postgres:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_DB: health
+      POSTGRES_USER: blair
+      POSTGRES_PASSWORD: blair
+    ports:
+      - "5439:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  quarkus-app:
+    build:
+      context: ..
+      dockerfile: Dockerfile
+    ports:
+      - "8080:8080"
+    environment:
+      DB_USER: blair
+      DB_PASSWORD: blair
+      DB_HOST: jdbc:postgresql://postgres:5432/health?currentSchema=health_schema
+      APP_JWT_ISSUER: name_of_your_app_jwt_issuer
+      ADMIN_USERNAME: admin
+      ADMIN_PASSWORD: admin
+    depends_on:
+      - postgres
+
+volumes:
+  pgdata:
