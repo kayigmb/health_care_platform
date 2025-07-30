@@ -13,7 +13,6 @@ import {
   Apartment,
   CalendarToday,
   Dashboard,
-  Event,
   Folder,
   Group,
   LocalHospital,
@@ -27,6 +26,7 @@ import { AuthLayoutPage } from "./AuthLayoutPage.tsx";
 import { RegisterPage } from "../views/AuthPages/RegisterPage.tsx";
 import { LoginPage } from "../views/AuthPages/LoginPage.tsx";
 import { HospitalsAdminPage } from "../components/DashboardComponents/Admin/HospitalAdminPage.tsx";
+import { MedicalRecordsPage } from "../components/DashboardComponents/Admin/MedicalRecordPage.tsx";
 
 const Routes: React.FC = () => {
   const adminNavs = {
@@ -45,13 +45,6 @@ const Routes: React.FC = () => {
         icon: <Add />,
         onClick: () => {
           console.log("Add Doctor clicked");
-        }
-      },
-      {
-        text: "Schedule Appointment",
-        icon: <Event />,
-        onClick: () => {
-          console.log("Schedule Appointment clicked");
         }
       }
     ]
@@ -115,7 +108,7 @@ const Routes: React.FC = () => {
                   },
                   {
                     path: "medical-records",
-                    element: <div>Medical Records Page</div>
+                    element: <MedicalRecordsPage />
                   },
                   {
                     path: "hospital",

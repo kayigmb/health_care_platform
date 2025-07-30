@@ -25,12 +25,34 @@ public class MedicalRecordsEntity extends BaseEntity {
 
     private String notes;
 
-    @Column(name = "medical_documents")
+    @Column(name = "medical_documents_name")
+    private String medicalDocumentsName;
+
+    @Column(name = "medical_documents_data")
     @Basic(fetch = FetchType.LAZY)
-    private byte[] medicalDocuments;
+    private byte[] medicalDocumentsContent;
+
+    @Column(name = "medical_documents_type")
+    private String medicalDocumentsType;
 
     public UsersEntity getRecords_patient() {
         return records_patient;
+    }
+
+    public String getMedicalDocumentsName() {
+        return medicalDocumentsName;
+    }
+
+    public void setMedicalDocumentsName(String medicalDocumentsName) {
+        this.medicalDocumentsName = medicalDocumentsName;
+    }
+
+    public String getMedicalDocumentsType() {
+        return medicalDocumentsType;
+    }
+
+    public void setMedicalDocumentsType(String medicalDocumentsType) {
+        this.medicalDocumentsType = medicalDocumentsType;
     }
 
     public void setRecords_patient(UsersEntity records_patient) {
@@ -77,11 +99,11 @@ public class MedicalRecordsEntity extends BaseEntity {
         this.notes = notes;
     }
 
-    public byte[] getMedicalDocuments() {
-        return medicalDocuments;
+    public byte[] getMedicalDocumentsContent() {
+        return medicalDocumentsContent;
     }
 
-    public void setMedicalDocuments(byte[] medicalDocuments) {
-        this.medicalDocuments = medicalDocuments;
+    public void setMedicalDocumentsContent(byte[] medicalDocuments) {
+        this.medicalDocumentsContent = medicalDocuments;
     }
 }

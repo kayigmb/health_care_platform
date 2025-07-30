@@ -21,6 +21,16 @@ export interface RoleType {
   updatedAt: Date;
 }
 
+export interface RoleScopeType {
+  id: string;
+  userId: string;
+  roleId: string;
+  hospitalId?: string;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
 export interface HospitalType {
   id: string;
   name: string;
@@ -29,6 +39,7 @@ export interface HospitalType {
   isDeleted: boolean;
   createdAt: Date;
   updatedAt: Date;
+  rolesScopes?: RoleScopeType[];
 }
 
 export interface UserShortType {
@@ -48,13 +59,30 @@ export interface UserType {
   roles: string[];
 }
 
+export interface MedicalRecordType {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  hospitalId: string;
+  diagnosis: string;
+  treatment: string;
+  notes: string;
+  medicalDocumentsName?: string;
+  medicalDocumentsType?: string;
+  medicalDocumentsContent?: string;
+  patient: UserShortType;
+  doctor: UserShortType;
+  hospital: HospitalType;
+  createdAt: Date;
+}
+
 export interface BaseItem {
   id: string;
 }
 
 export interface ColumnProps<T extends BaseItem> {
   title?: string;
-  value: keyof T;
+  value: keyof T | "actions";
   renderCell?: (item: T, column: ColumnProps<T>) => React.ReactNode;
   renderHeaderCell?: () => React.ReactNode;
 }

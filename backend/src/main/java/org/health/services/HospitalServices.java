@@ -4,6 +4,7 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.transaction.Transactional;
 import org.health.dtos.HospitalDto;
+import org.health.dtos.HospitalMoreDTO;
 import org.health.dtos.mappers.HospitalMapper;
 import org.health.dtos.request.HospitalRequestDTO;
 import org.health.entities.HospitalsEntity;
@@ -23,19 +24,19 @@ public class HospitalServices {
         this.hospitalsRepository = hospitalsRepository;
     }
 
-    public List<HospitalDto> getAllHospitals() {
+    public List<HospitalMoreDTO> getAllHospitals() {
         return hospitalsRepository
                 .findAllHospitals().stream()
-                .map(HospitalMapper::toDto)
+                .map(HospitalMapper::toMoreDTO)
                 .toList();
     }
 
-    public HospitalDto getHospitalById(UUID id) throws NotFoundError {
+    public HospitalMoreDTO getHospitalById(UUID id) throws NotFoundError {
         HospitalsEntity existingHospital = hospitalsRepository.findById(id);
         if (existingHospital == null) {
             throw new NotFoundError("Hospital with id " + id + " not found");
         }
-        return HospitalMapper.toDto(existingHospital);
+        return HospitalMapper.toMoreDTO(existingHospital);
     }
 
     @Transactional
