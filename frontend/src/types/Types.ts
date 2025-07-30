@@ -82,7 +82,7 @@ export interface BaseItem {
 
 export interface ColumnProps<T extends BaseItem> {
   title?: string;
-  value: keyof T | "actions";
+  value: keyof T;
   renderCell?: (item: T, column: ColumnProps<T>) => React.ReactNode;
   renderHeaderCell?: () => React.ReactNode;
 }
@@ -97,4 +97,26 @@ export interface TableProps<T extends BaseItem> {
   columns: ColumnProps<T>[];
   pagination?: boolean;
   variant?: (typeof TableVariants)[keyof typeof TableVariants];
+}
+
+export type AppointmentStatus = "pending" | "confirmed" | "cancelled" | "completed";
+
+export interface AppointmentType {
+  id: string;
+  patientId: string;
+  doctorId: string;
+  hospitalId: string;
+  status: AppointmentStatus;
+  appointmentDate: Date;
+  service: string;
+  isDeleted: boolean;
+  createdAt: Date;
+  updatedAt: Date;
+  patient: UserShortType;
+  doctor: UserShortType;
+  hospital: HospitalType;
+}
+
+export interface MedicalTable extends MedicalRecordType {
+  actions?: React.ReactNode;
 }

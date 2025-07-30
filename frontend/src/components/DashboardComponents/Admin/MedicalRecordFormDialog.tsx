@@ -174,7 +174,6 @@ export function MedicalRecordFormDialog({
         });
 
         if (res !== undefined) {
-          // Reset form on success
           setForm({
             patientId: "",
             doctorId: "",

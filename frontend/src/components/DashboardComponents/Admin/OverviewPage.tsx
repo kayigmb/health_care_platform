@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Avatar,
   Box,
@@ -27,66 +27,19 @@ import {
   User,
   XCircle
 } from "lucide-react";
-
-const statsData = [
-  { title: "Total Users", value: "1,245", icon: <User size={20} />, color: "#4361ee" },
-  { title: "Doctors", value: "84", icon: <Stethoscope size={20} />, color: "#3a0ca3" },
-  { title: "Today's Appointments", value: "48", icon: <Calendar size={20} />, color: "#7209b7" },
-  { title: "Monthly Growth", value: "+12%", icon: <LucideTrendingUp size={20} />, color: "#f72585" }
-];
-
-const recentAppointments = [
-  {
-    id: 1,
-    patient: "John Doe",
-    doctor: "Dr. Sarah Smith",
-    speciality: "Cardiology",
-    date: "2023-06-15 10:00 AM",
-    status: "Completed"
-  },
-  {
-    id: 2,
-    patient: "Jane Smith",
-    doctor: "Dr. Michael Brown",
-    speciality: "Dermatology",
-    date: "2023-06-15 11:30 AM",
-    status: "Upcoming"
-  },
-  {
-    id: 3,
-    patient: "Robert Johnson",
-    doctor: "Dr. Emma Wilson",
-    speciality: "Neurology",
-    date: "2023-06-15 2:15 PM",
-    status: "Cancelled"
-  },
-  {
-    id: 4,
-    patient: "Emily Davis",
-    doctor: "Dr. James Taylor",
-    speciality: "Ophthalmology",
-    date: "2023-06-16 9:00 AM",
-    status: "Upcoming"
-  },
-  {
-    id: 5,
-    patient: "William Miller",
-    doctor: "Dr. Olivia Garcia",
-    speciality: "Pediatrics",
-    date: "2023-06-16 3:45 PM",
-    status: "Upcoming"
-  }
-];
+import { useFetch } from "../../../hooks/useFetch";
+import { APIRoutesNames } from "../../../utils/RoutesNames";
+import type { AppointmentType } from "../../../types/Types";
 
 const getStatusChip = (status: string) => {
   switch (status) {
-    case "Completed":
+    case "completed":
       return (
         <Chip icon={<CheckCircle size={16} />} label="Completed" size="small" color="success" />
       );
-    case "Upcoming":
-      return <Chip icon={<Clock size={16} />} label="Upcoming" size="small" color="primary" />;
-    case "Cancelled":
+    case "confirmed":
+      return <Chip icon={<Clock size={16} />} label="Confirmed" size="small" color="primary" />;
+    case "cancelled":
       return <Chip icon={<XCircle size={16} />} label="Cancelled" size="small" color="error" />;
     default:
       return <Chip label={status} size="small" />;
@@ -95,17 +48,52 @@ const getStatusChip = (status: string) => {
 
 export const OverviewPage: React.FC = () => {
   const [tabValue, setTabValue] = useState(0);
+  const [appointments, setAppointments] = useState<AppointmentType[]>([]);
+  const [usersCount, setUsersCount] = useState(0);
+  const [doctorsCount, setDoctorsCount] = useState(0);
+  const { fetchData } = useFetch<any, void>();
 
   const handleTabChange = (e: React.SyntheticEvent, newValue: number) => {
     e.preventDefault();
     setTabValue(newValue);
   };
 
-  const filteredAppointments = recentAppointments.filter((appointment) => {
-    if (tabValue === 1) return appointment.status === "Upcoming";
-    if (tabValue === 2) return appointment.status === "Completed";
+  useEffect(() => {
+    async function fetchStats() {
+      const appointmentsData = await fetchData({ url: APIRoutesNames.APPOINTMENTS });
+      const usersData = await fetchData({ url: `${APIRoutesNames.USERS}?role=user` });
+      const doctorsData = await fetchData({ url: `${APIRoutesNames.USERS}?role=doctor` });
+
+      setAppointments(appointmentsData || []);
+      setUsersCount(usersData?.length || 0);
+      setDoctorsCount(doctorsData?.length || 0);
+    }
+
+    fetchStats();
+  }, []);
+
+  const filteredAppointments = appointments.filter((appointment) => {
+    if (tabValue === 1) return appointment.status === "confirmed";
+    if (tabValue === 2) return appointment.status === "completed";
     return true;
   });
+
+  const statsData = [
+    { title: "Total Users", value: usersCount, icon: <User size={20} />, color: "#4361ee" },
+    { title: "Doctors", value: doctorsCount, icon: <Stethoscope size={20} />, color: "#3a0ca3" },
+    {
+      title: "Today's Appointments",
+      value: appointments.length,
+      icon: <Calendar size={20} />,
+      color: "#7209b7"
+    },
+    {
+      title: "Monthly Growth",
+      value: "+12%",
+      icon: <LucideTrendingUp size={20} />,
+      color: "#f72585"
+    }
+  ];
 
   return (
     <Box>
@@ -113,17 +101,9 @@ export const OverviewPage: React.FC = () => {
         Admin Dashboard
       </Typography>
 
-      {/* Stats Cards */}
       <Grid container spacing={3} mb={4}>
         {statsData.map((stat) => (
-          <Grid
-            sx={{
-              xs: 12,
-              sm: 6,
-              md: 3
-            }}
-            key={stat.title}
-          >
+          <Grid sx={{ xs: 12, sm: 6 }} key={stat.title}>
             <Card
               sx={{
                 height: "100%",
@@ -152,7 +132,6 @@ export const OverviewPage: React.FC = () => {
       </Grid>
 
       <Grid container spacing={3}>
-        {/* Recent Appointments */}
         <Grid sx={{ xs: 12 }}>
           <Card sx={{ boxShadow: "0px 4px 12px rgba(0, 0, 0, 0.05)", borderRadius: 2 }}>
             <CardContent>
@@ -173,18 +152,20 @@ export const OverviewPage: React.FC = () => {
                     <TableRow>
                       <TableCell>Patient</TableCell>
                       <TableCell>Doctor</TableCell>
-                      <TableCell>Speciality</TableCell>
+                      <TableCell>Service</TableCell>
                       <TableCell>Date</TableCell>
                       <TableCell>Status</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
-                    {filteredAppointments.map((appointment) => (
+                    {filteredAppointments.slice(0, 5).map((appointment) => (
                       <TableRow key={appointment.id}>
-                        <TableCell>{appointment.patient}</TableCell>
-                        <TableCell>{appointment.doctor}</TableCell>
-                        <TableCell>{appointment.speciality}</TableCell>
-                        <TableCell>{appointment.date}</TableCell>
+                        <TableCell>{`${appointment.patient.firstName} ${appointment.patient.lastName}`}</TableCell>
+                        <TableCell>{`${appointment.doctor.firstName} ${appointment.doctor.lastName}`}</TableCell>
+                        <TableCell>{appointment.service}</TableCell>
+                        <TableCell>
+                          {new Date(appointment.appointmentDate).toLocaleString()}
+                        </TableCell>
                         <TableCell>{getStatusChip(appointment.status)}</TableCell>
                       </TableRow>
                     ))}

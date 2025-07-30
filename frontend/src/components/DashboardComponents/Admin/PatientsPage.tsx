@@ -161,9 +161,6 @@ export function PatientsAdminPage() {
                 <strong>Created At:</strong> {new Date(selectedUser.createdAt).toLocaleString()}
               </Typography>
               <Typography>
-                <strong>Roles:</strong> {[].join(", ") || "N/A"}
-              </Typography>
-              <Typography>
                 <strong>User System ID:</strong> {selectedUser.userSystemId || "N/A"}
               </Typography>
             </Box>

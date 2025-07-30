@@ -25,6 +25,7 @@ export const APIRoutesNames = {
   ROLE_SCOPES: "/roles-scopes",
   HOSPITALS: "/hospitals",
   MEDICAL_RECORDS: "/medical-records",
+  APPOINTMENTS: "/appointments",
   USER_PROFILE() {
     return `${this.USERS}/me`;
   }

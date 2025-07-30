@@ -37,11 +37,15 @@ public class AppointmentsMapper {
                 entity.getApp_patient().getId(),
                 entity.getApp_doctor() != null ? entity.getApp_doctor().getId() : null,
                 entity.getHospital() != null ? entity.getHospital().getId() : null,
+                entity.getAppointmentDate(),
                 entity.getStatus(),
                 entity.getService(),
                 entity.getDeleted(),
                 entity.getCreatedAt(),
-                entity.getUpdatedAt()
+                entity.getUpdatedAt(),
+                UsersMapper.toDto(entity.getApp_patient()),
+                UsersMapper.toDto(entity.getApp_doctor()),
+                HospitalMapper.toDto(entity.getHospital())
         );
     }
 }

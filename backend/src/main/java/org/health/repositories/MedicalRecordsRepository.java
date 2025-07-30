@@ -7,10 +7,19 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Root;
 import org.health.entities.MedicalRecordsEntity;
 
+import java.util.List;
 import java.util.UUID;
 
 @ApplicationScoped
 public class MedicalRecordsRepository implements PanacheRepository<MedicalRecordsEntity> {
+    public List<MedicalRecordsEntity> findAll(UUID patient) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery<MedicalRecordsEntity> query = cb.createQuery(MedicalRecordsEntity.class);
+        Root<MedicalRecordsEntity> root = query.from(MedicalRecordsEntity.class);
+        query.select(root).where(cb.equal(root.get("record_patient").get("id"), patient));
+        return getEntityManager().createQuery(query).getResultList();
+    }
+
     public MedicalRecordsEntity findById(UUID id) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery<MedicalRecordsEntity> query = cb.createQuery(MedicalRecordsEntity.class

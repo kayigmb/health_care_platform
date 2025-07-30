@@ -77,7 +77,7 @@ public class MedicalRecordsServices {
 
     public Response downloadMedicalDocument(UUID id) throws NotFoundError {
         MedicalRecordsEntity medicalRecord = medicalRecordsRepository.findById(id);
-        if (medicalRecord == null || medicalRecord.getMedicalDocumentsContent() == null) {
+        if (medicalRecord == null) {
             throw new NotFoundError("Medical record or document not found with the provided ID.");
         }
         return ServeFiles.serveFile(medicalRecord, "attachment");
@@ -85,7 +85,7 @@ public class MedicalRecordsServices {
 
     public Response previewMedicalDocument(UUID id) throws NotFoundError {
         MedicalRecordsEntity medicalRecord = medicalRecordsRepository.findById(id);
-        if (medicalRecord == null || medicalRecord.getMedicalDocumentsContent() == null) {
+        if (medicalRecord == null) {
             throw new NotFoundError("Medical record or document not found with the provided ID.");
         }
         return ServeFiles.serveFile(medicalRecord, "inline");

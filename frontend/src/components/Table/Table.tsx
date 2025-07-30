@@ -15,7 +15,12 @@ import {
 } from "@mui/material";
 import { ChevronLeft, ChevronRight } from "@mui/icons-material";
 import "./Table.css";
-import { type BaseItem, type TableProps, TableVariants } from "../../types/Types.ts";
+import {
+  type BaseItem,
+  type ColumnProps,
+  type TableProps,
+  TableVariants
+} from "../../types/Types.ts";
 
 interface ExtendedTableProps<T extends BaseItem> extends TableProps<T> {
   onRowClick?: (row: T) => void;
@@ -97,7 +102,7 @@ export function Table<T extends BaseItem>({
                 onClick={() => onRowClick?.(item)}
                 sx={{ cursor: onRowClick ? "pointer" : "default" }}
               >
-                {columns.map((column) => (
+                {columns.map((column: ColumnProps<T>) => (
                   <TableCell key={`${item.id}_${String(column.value)}`} className="tcell">
                     {column?.renderCell
                       ? column.renderCell(item, column)

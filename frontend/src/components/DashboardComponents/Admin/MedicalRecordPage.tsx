@@ -14,7 +14,7 @@ import { Eye, FileDown, Plus, X } from "lucide-react";
 import { useFetch } from "../../../hooks/useFetch";
 import { APIRoutesNames } from "../../../utils/RoutesNames";
 import { Table } from "../../Table/Table";
-import type { ColumnProps, MedicalRecordType } from "../../../types/Types";
+import type { ColumnProps, MedicalRecordType, MedicalTable } from "../../../types/Types";
 import { MedicalRecordFormDialog } from "./MedicalRecordFormDialog.tsx";
 
 const formatDateTime = (dateString: string | Date): string => {
@@ -84,7 +84,7 @@ export function MedicalRecordsPage() {
     }
   }, [debouncedSearchTerm, records]);
 
-  const columns: ColumnProps<MedicalRecordType>[] = [
+  const columns: ColumnProps<MedicalTable>[] = [
     { title: "Diagnosis", value: "diagnosis" },
     {
       title: "Patient",

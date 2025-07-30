@@ -8,10 +8,14 @@ public record AppointmentDto(
         UUID patientId,
         UUID doctorId,
         UUID hospitalId,
+        ZonedDateTime appointmentDate,
         String status,
         String service,
         Boolean isDeleted,
         ZonedDateTime createdAt,
-        ZonedDateTime updatedAt
+        ZonedDateTime updatedAt,
+        UsersDto patient,
+        UsersDto doctor,
+        HospitalDto hospital
 ) {
 }

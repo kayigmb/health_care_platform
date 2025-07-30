@@ -1,12 +1,9 @@
-import React from "react";
 import { createBrowserRouter, RouterProvider } from "react-router";
 import { RoutesNames } from "../utils/RoutesNames.ts";
 import { ErrorPage } from "../views/ErrorPage/ErrorPage.tsx";
 import { LayoutPage } from "../views/LayoutPage/LayoutPage.tsx";
 import { ProtectedRoutes } from "./ProtectedRoutes.tsx";
 import { MainPage } from "../views/MainPage/MainPage.tsx";
-import { UsersPages } from "../views/Dashboards/UsersPages/UsersPages.tsx";
-import { DoctorsPages } from "../views/Dashboards/DoctorsPages/DoctorsPages.tsx";
 import { DashboardLayout } from "../views/Dashboards/DashboardLayout/DashboardLayout.tsx";
 import {
   Add,
@@ -27,6 +24,16 @@ import { RegisterPage } from "../views/AuthPages/RegisterPage.tsx";
 import { LoginPage } from "../views/AuthPages/LoginPage.tsx";
 import { HospitalsAdminPage } from "../components/DashboardComponents/Admin/HospitalAdminPage.tsx";
 import { MedicalRecordsPage } from "../components/DashboardComponents/Admin/MedicalRecordPage.tsx";
+import { AppointmentsAdminPage } from "../components/DashboardComponents/Admin/AppointmentPage.tsx";
+import { DoctorOverviewPage } from "../components/DashboardComponents/Doctors/DoctorOverviewPage.tsx";
+import { UserOverviewPage } from "../components/DashboardComponents/Users/UsersOverviewPage.tsx";
+import { MedicalRecordsDoctorPage } from "../components/DashboardComponents/Doctors/MedicalRecordsDoctorPage.tsx";
+import { AppointmentsUsersPage } from "../components/DashboardComponents/Users/AppointmentsUsersPage.tsx";
+import { MedicalRecordsUserPage } from "../components/DashboardComponents/Users/MedicalRecordsUserPage.tsx";
+
+function AppointmentsDoctorPage() {
+  return null;
+}
 
 const Routes: React.FC = () => {
   const adminNavs = {
@@ -37,7 +44,7 @@ const Routes: React.FC = () => {
       { text: "Patients", icon: <Group />, path: "patients" },
       { text: "Appointments", icon: <CalendarToday />, path: "appointments" },
       { text: "Medical Records", icon: <Folder />, path: "medical-records" },
-      { text: "Hospital", icon: <Apartment />, path: "hospital" } // <-- Added hospital nav item
+      { text: "Hospital", icon: <Apartment />, path: "hospital" }
     ],
     quickActions: [
       {
@@ -49,6 +56,21 @@ const Routes: React.FC = () => {
       }
     ]
   };
+
+  const doctorNavs = {
+    sidebarItems: [
+      { text: "Overview", icon: <Dashboard />, path: "overview" },
+      { text: "Patients", icon: <Group />, path: "patients" },
+      { text: "Appointments", icon: <CalendarToday />, path: "appointments" },
+      { text: "Medical Records", icon: <Folder />, path: "medical-records" }
+    ]
+  };
+
+  const userNavItems = [
+    { text: "Overview", icon: <Dashboard />, path: "overview" },
+    { text: "Appointments", icon: <CalendarToday />, path: "appointments" },
+    { text: "Medical Records", icon: <Folder />, path: "medical-records" }
+  ];
 
   const routers = createBrowserRouter(
     [
@@ -67,11 +89,51 @@ const Routes: React.FC = () => {
             children: [
               {
                 path: RoutesNames.USERS,
-                element: <UsersPages />
+                element: <DashboardLayout sidebarItems={userNavItems} />,
+                children: [
+                  {
+                    index: true,
+                    element: <UserOverviewPage />
+                  },
+                  {
+                    path: "overview",
+                    element: <UserOverviewPage />
+                  },
+                  {
+                    path: "appointments",
+                    element: <AppointmentsUsersPage />
+                  },
+                  {
+                    path: "medical-records",
+                    element: <MedicalRecordsUserPage />
+                  }
+                ]
               },
               {
                 path: RoutesNames.DOCTORS,
-                element: <DoctorsPages />
+                element: <DashboardLayout sidebarItems={doctorNavs.sidebarItems} />,
+                children: [
+                  {
+                    index: true,
+                    element: <DoctorOverviewPage />
+                  },
+                  {
+                    path: "overview",
+                    element: <DoctorOverviewPage />
+                  },
+                  {
+                    path: "patients",
+                    element: <PatientsAdminPage />
+                  },
+                  {
+                    path: "appointments",
+                    element: <AppointmentsDoctorPage />
+                  },
+                  {
+                    path: "medical-records",
+                    element: <MedicalRecordsDoctorPage />
+                  }
+                ]
               },
               {
                 path: RoutesNames.ADMIN,
@@ -104,7 +166,7 @@ const Routes: React.FC = () => {
                   },
                   {
                     path: "appointments",
-                    element: <div>Appointments Management Page</div>
+                    element: <AppointmentsAdminPage />
                   },
                   {
                     path: "medical-records",

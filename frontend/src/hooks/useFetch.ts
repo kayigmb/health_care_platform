@@ -65,6 +65,7 @@ export function useFetch<TResultType, TBodyType = undefined>() {
           setData(data.data ?? null);
           return data.data;
         } else {
+          console.log("Error data:", data);
           showToast(data.message ?? "Something went wrong", "error");
         }
       })

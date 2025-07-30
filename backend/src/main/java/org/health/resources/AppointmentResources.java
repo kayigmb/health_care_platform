@@ -24,10 +24,17 @@ public class AppointmentResources {
 
     @GET
     @RolesAllowed({"admin", "doctor"})
-    public Response getAllAppointments() {
+    public Response getAllAppointments(@QueryParam("patient") UUID patientId,
+                                       @QueryParam("doctor") UUID doctorId,
+                                       @QueryParam("hospital") UUID hospitalId
+    ) {
         try {
             return ResponseBuilder.success("Appointments retrieved successfully",
-                    appointmentsServices.getAllAppointments());
+                    appointmentsServices.getAllAppointments(
+                            patientId,
+                            doctorId,
+                            hospitalId
+                    ));
         } catch (Exception e) {
             return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
         }

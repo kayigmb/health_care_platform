@@ -33,8 +33,8 @@ public class AppointmentsServices {
         this.hospitalsRepository = hospitalsRepository;
     }
 
-    public List<AppointmentDto> getAllAppointments() {
-        return appointmentsRepository.findAllAppointments()
+    public List<AppointmentDto> getAllAppointments(UUID patientId, UUID doctorId, UUID hospitalId) {
+        return appointmentsRepository.findAllAppointments(patientId, doctorId, hospitalId)
                 .stream()
                 .map(AppointmentsMapper::toDto)
                 .toList();

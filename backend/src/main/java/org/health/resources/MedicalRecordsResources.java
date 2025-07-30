@@ -12,7 +12,6 @@ import org.health.utils.ResponseBuilder;
 import java.util.UUID;
 
 @Path("/medical-records")
-@Authenticated
 public class MedicalRecordsResources {
     private final MedicalRecordsServices medicalRecordsServices;
 
@@ -22,13 +21,15 @@ public class MedicalRecordsResources {
     }
 
     @GET
-    public Response getAllMedicalRecords() {
+    @Authenticated
+    public Response getAllMedicalRecords(@QueryParam("patient") UUID patient) {
         return ResponseBuilder.success("Medical records retrieved successfully",
                 medicalRecordsServices.getMedicalRecords());
     }
 
     @GET
     @Path("/{id}")
+    @Authenticated
     public Response getMedicalRecordById(@PathParam("id") UUID id) {
         try {
             return ResponseBuilder.success("Medical record retrieved successfully",
@@ -41,6 +42,7 @@ public class MedicalRecordsResources {
     }
 
     @POST
+    @Authenticated
     public Response createMedicalRecord(MedicalRecordsRequestDTO recordsRequestDTO) {
         try {
             return ResponseBuilder.success(Response.Status.CREATED,
@@ -55,6 +57,7 @@ public class MedicalRecordsResources {
 
     @PATCH
     @Path("/{id}")
+    @Authenticated
     public Response updateMedicalRecord(@PathParam("id") UUID id, MedicalRecordsRequestDTO recordsRequestDTO) {
         try {
             return ResponseBuilder.success("Medical record updated successfully",
@@ -68,10 +71,35 @@ public class MedicalRecordsResources {
 
     @DELETE
     @Path("/{id}")
+    @Authenticated
     public Response deleteMedicalRecord(@PathParam("id") UUID id) {
         try {
             return ResponseBuilder.success("Medical record deleted successfully",
                     medicalRecordsServices.deleteMedicalRecord(id));
+        } catch (NotFoundError e) {
+            return ResponseBuilder.error(Response.Status.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GET
+    @Path("/{id}/download")
+    public Response downloadMedicalDocument(@PathParam("id") UUID id) {
+        try {
+            return medicalRecordsServices.downloadMedicalDocument(id);
+        } catch (NotFoundError e) {
+            return ResponseBuilder.error(Response.Status.NOT_FOUND, e.getMessage());
+        } catch (Exception e) {
+            return ResponseBuilder.error(Response.Status.INTERNAL_SERVER_ERROR, e.getMessage());
+        }
+    }
+
+    @GET
+    @Path("/{id}/preview")
+    public Response previewMedicalDocument(@PathParam("id") UUID id) {
+        try {
+            return medicalRecordsServices.previewMedicalDocument(id);
         } catch (NotFoundError e) {
             return ResponseBuilder.error(Response.Status.NOT_FOUND, e.getMessage());
         } catch (Exception e) {
