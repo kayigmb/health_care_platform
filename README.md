@@ -34,20 +34,30 @@ This project is a full-stack web application developed using **Quarkus** for the
 > The homepage route is `/`, **not** `/home`.  
 > Make sure your routing logic or links reflect this.
 
-## ⚙️ Environment Setup
+## Environment Setup
 
-To run the backend, ensure you:
+To run the backend and frontend locally, follow these steps:
 
-1. 📄 Copy `.env.example` in `/backend` to `.env`
-2. 🛠️ Fill all required variables correctly (DB, ports, etc.)
+1. Copy `.env.example` in `/backend` to `.env`
+2. Fill in all required environment variables with your own values (database credentials, JWT issuer,
+   admin username/password, etc.)
+3. In the `/backend` folder, run:
 
-## 🛠 Development
+    ``` bash
+   docker compose up --build
+   ```
 
-Start Quarkus backend:
+This will build and start your backend and database services.
 
-```bash
-./mvnw clean install quarkus:dev
-```
+4. Copy `.env.example` in `/frontend` (if applicable) to `.env`
+5. Fill in frontend environment variables if any
+6. In the `/frontend` folder, run:
+    ``` bash
+   pnpm dev
+    ```
+   This will start the frontend development server.
+7. Open your browser and navigate to the frontend URL (usually `http://localhost:5173` or as
+   configured).
 
 ## 📄 License
 
