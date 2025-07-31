@@ -23,7 +23,6 @@ public class AppointmentResources {
     }
 
     @GET
-    @RolesAllowed({"admin", "doctor"})
     public Response getAllAppointments(@QueryParam("patient") UUID patientId,
                                        @QueryParam("doctor") UUID doctorId,
                                        @QueryParam("hospital") UUID hospitalId
@@ -81,7 +80,6 @@ public class AppointmentResources {
 
     @DELETE
     @Path("/{id}")
-    @RolesAllowed({"admin", "doctor"})
     public Response deleteAppointment(@PathParam("id") UUID id) {
         try {
             return ResponseBuilder.success("Appointment deleted successfully",
@@ -95,7 +93,6 @@ public class AppointmentResources {
 
     @PATCH
     @Path("/{id}/status")
-    @RolesAllowed({"admin", "doctor"})
     public Response updateAppointmentStatus(@PathParam("id") UUID id, @QueryParam("status") String status) {
         try {
             return ResponseBuilder.success("Appointment status updated successfully",

@@ -10,7 +10,7 @@ import { LocalStorageStores, setToLocalStorage } from "../../utils/manageLocalSt
 import { useUserContext } from "../../contexts/UserContext.tsx";
 
 export function LoginPage() {
-  const { fetchData } = useFetch<string, LoginForm>();
+  const { fetchData, loading } = useFetch<string, LoginForm>();
   const { showToast } = useToast();
   const navigate = useNavigate();
   const { getUserData } = useUserContext();
@@ -36,12 +36,10 @@ export function LoginPage() {
         body: values
       });
 
-      // work on the data
       if (res !== null) {
         showToast("Login successful", "success");
         setToLocalStorage(LocalStorageStores.TOKEN, res);
         navigate(RoutesNames.HOME, { replace: true });
-        getUserData ? await getUserData() : null;
         if (getUserData) {
           await getUserData();
         }
@@ -81,7 +79,7 @@ export function LoginPage() {
         helperText={errors.password}
       />
 
-      <Button type="submit" variant="contained" fullWidth>
+      <Button type="submit" variant="contained" fullWidth loading={loading}>
         Sign In
       </Button>
 

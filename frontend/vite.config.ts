@@ -3,7 +3,7 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig(({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
-  const apiBase = env.VITE_API_BASE_URL || "http://localhost:8080";
+  const apiBase = env.VITE_API_BASE_URL;
 
   return {
     plugins: [react()],
@@ -15,15 +15,15 @@ export default defineConfig(({ mode }) => {
           rewrite: (path) => path.replace(/^\/api/, "")
         }
       }
-    },
-    build: {
-      outDir: "../frontend/ui/",
-      emptyOutDir: true,
-      rollupOptions: {
-        input: {
-          main: "index.html"
-        }
-      }
     }
+    // build: {
+    //   outDir: "../frontend/ui/",
+    //   emptyOutDir: true,
+    //   rollupOptions: {
+    //     input: {
+    //       main: "index.html"
+    //     }
+    //   }
+    // }
   };
 });

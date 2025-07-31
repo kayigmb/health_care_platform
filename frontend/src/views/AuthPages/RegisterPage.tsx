@@ -17,7 +17,7 @@ function isRwandanPhone(phone: string): boolean {
 
 export function RegisterPage() {
   const [phoneValue, setPhoneValue] = useState<string>("");
-  const { fetchData } = useFetch<string, LoginForm>();
+  const { fetchData, loading } = useFetch<string, LoginForm>();
   const { showToast } = useToast();
   const navigate = useNavigate();
 
@@ -38,8 +38,6 @@ export function RegisterPage() {
       return errors;
     },
     onSubmit: async (values: RegisterForm) => {
-      console.log("Submitting registration with values:", values);
-
       const res = await fetchData({
         url: APIRoutesNames.REGISTER,
         method: "POST",
@@ -125,7 +123,7 @@ export function RegisterPage() {
         )}
       </FormControl>
 
-      <Button type="submit" variant="contained" fullWidth>
+      <Button type="submit" variant="contained" fullWidth loading={loading}>
         Create Account
       </Button>
 

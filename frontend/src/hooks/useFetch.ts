@@ -19,65 +19,72 @@ interface FetchParams<BodyType = undefined> {
 
 export function useFetch<TResultType, TBodyType = undefined>() {
   const { showToast } = useToast();
+  const apiBase = import.meta.env.VITE_API_BASE_URL;
   const navigate = useNavigate();
   const [data, setData] = useState<TResultType | null>(null);
   const [message, setMessage] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = useCallback(async ({ url, method = "GET", body }: FetchParams<TBodyType>) => {
-    setLoading(true);
-    setMessage("");
-    setData(null);
+  const fetchData = useCallback(
+    async ({ url, method = "GET", body }: FetchParams<TBodyType>) => {
+      setLoading(true);
+      setMessage("");
+      setData(null);
 
-    const headers: Record<string, string> = {
-      "Content-Type": "application/json"
-    };
-    const authkey = getFromLocalStorage<string>(LocalStorageStores.TOKEN);
-    if (authkey) {
-      headers["Authorization"] = `Bearer ${getFromLocalStorage(LocalStorageStores.TOKEN)}`;
-    }
+      const headers: Record<string, string> = {
+        "Content-Type": "application/json"
+      };
+      const token = getFromLocalStorage<string>(LocalStorageStores.TOKEN);
+      if (token) {
+        headers["Authorization"] = `Bearer ${token}`;
+      }
 
-    return fetch(`/api${url as string}`, {
-      method,
-      headers,
-      body: method !== "GET" ? JSON.stringify(body) : undefined
-    })
-      .then((res) => {
-        setLoading(false);
+      const api = (u: string) =>
+        import.meta.env.MODE === "production" ? `${apiBase}${u}` : `/api${u}`;
+
+      try {
+        const res = await fetch(api(url as string), {
+          method,
+          headers,
+          body: method !== "GET" ? JSON.stringify(body) : undefined
+        });
+
         if (!res.ok) {
           if (res.status === 401) {
             showToast("Unauthorized access. Please log in again.", "error");
             clearLocalStorage();
-            return navigate(RoutesNames.LOGIN);
+            navigate(RoutesNames.LOGIN);
+            return null;
           } else if (res.status === 403) {
             showToast(
               "Forbidden access. You do not have permission to perform this action.",
               "error"
             );
-            return navigate(RoutesNames.HOME);
+            navigate(RoutesNames.HOME);
+            return null;
           }
         }
-        return res.json();
-      })
-      .then((data: ApiResultFormat<TResultType>) => {
-        setLoading(false);
-        if (data.status === "success") {
-          setData(data.data ?? null);
-          return data.data;
-        } else {
-          console.log("Error data:", data);
-          showToast(data.message ?? "Something went wrong", "error");
+
+        const parsed: ApiResultFormat<TResultType> = await res.json();
+
+        if (parsed.status === "error") {
+          console.log("Error data:", parsed);
+          showToast(parsed.message ?? "Something went wrong", "error");
+          return null;
         }
-      })
-      .catch((err) => {
+
+        setData(parsed.data ?? null);
+        return parsed.data ?? null;
+      } catch (err) {
         console.error("Fetch error:", err);
         showToast(err instanceof Error ? err.message : "Unknown error", "error");
+        return null;
+      } finally {
         setLoading(false);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
-  }, []);
+      }
+    },
+    [navigate, showToast]
+  );
 
   return { data, message, loading, fetchData };
 }

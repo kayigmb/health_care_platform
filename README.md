@@ -59,6 +59,11 @@ This will build and start your backend and database services.
 7. Open your browser and navigate to the frontend URL (usually `http://localhost:5173` or as
    configured).
 
+##  Admin Credentials
+
+username: `admin`
+password: `admin`
+
 ## 📄 License
 
 MIT
