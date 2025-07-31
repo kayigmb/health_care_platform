@@ -45,3 +45,4 @@ backend/.env
 .certs/
 
 frontend/ui
+.env

@@ -3,7 +3,7 @@ package org.health.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "roles_scope", schema = "health_schema")
+@Table(name = "roles_scope")
 public class RolesScopeEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

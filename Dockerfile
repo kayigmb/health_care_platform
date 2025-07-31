@@ -3,9 +3,9 @@ FROM maven:3.9-eclipse-temurin-17
 WORKDIR /app
 
 # Copy project files
-COPY backend/pom.xml /mvnw /mvnw.cmd ./
+COPY backend/pom.xml backend/mvnw backend/mvnw.cmd ./
 COPY backend/.mvn .mvn
-COPY backend/src ./sr
+COPY backend/src ./src
 COPY backend/setup.sh ./setup.sh
 
 RUN chmod +x ./setup.sh

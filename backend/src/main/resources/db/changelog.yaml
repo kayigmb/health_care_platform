@@ -1,0 +1,249 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1
+      author: health-dev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          schemaExists:
+            schemaName: public
+      changes:
+        - sql:
+            sql: CREATE SCHEMA IF NOT EXISTS public;
+
+  - changeSet:
+      id: 2
+      author: health-dev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: users
+            schemaName: public
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: users
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: name
+                  type: VARCHAR(100)
+              - column:
+                  name: email
+                  type: VARCHAR(100)
+              - column:
+                  name: role
+                  type: VARCHAR(50)
+
+  - changeSet:
+      id: 3
+      author: health-dev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: patients
+            schemaName: public
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: patients
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+              - column:
+                  name: gender
+                  type: VARCHAR(10)
+              - column:
+                  name: age
+                  type: INT
+              - column:
+                  name: address
+                  type: VARCHAR(255)
+
+  - changeSet:
+      id: 4
+      author: health-dev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: doctors
+            schemaName: public
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: doctors
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: user_id
+                  type: UUID
+              - column:
+                  name: specialty
+                  type: VARCHAR(100)
+
+  - changeSet:
+      id: 5
+      author: health-dev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: appointments
+            schemaName: public
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: appointments
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: doctor_id
+                  type: UUID
+              - column:
+                  name: patient_id
+                  type: UUID
+              - column:
+                  name: appointment_date
+                  type: TIMESTAMP
+              - column:
+                  name: status
+                  type: VARCHAR(50)
+
+  - changeSet:
+      id: 6
+      author: health-dev
+      preConditions:
+        onFail: MARK_RAN
+        not:
+          tableExists:
+            tableName: medical_records
+            schemaName: public
+      changes:
+        - createTable:
+            schemaName: public
+            tableName: medical_records
+            columns:
+              - column:
+                  name: id
+                  type: UUID
+                  constraints:
+                    primaryKey: true
+                    nullable: false
+              - column:
+                  name: patient_id
+                  type: UUID
+              - column:
+                  name: doctor_id
+                  type: UUID
+              - column:
+                  name: diagnosis
+                  type: TEXT
+              - column:
+                  name: treatment
+                  type: TEXT
+              - column:
+                  name: record_date
+                  type: TIMESTAMP
+
+  - changeSet:
+      id: 7
+      author: health-dev
+      changes:
+        - addForeignKeyConstraint:
+            baseTableSchemaName: public
+            baseTableName: patients
+            baseColumnNames: user_id
+            referencedTableSchemaName: public
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_patients_user
+
+  - changeSet:
+      id: 8
+      author: health-dev
+      changes:
+        - addForeignKeyConstraint:
+            baseTableSchemaName: public
+            baseTableName: doctors
+            baseColumnNames: user_id
+            referencedTableSchemaName: public
+            referencedTableName: users
+            referencedColumnNames: id
+            constraintName: fk_doctors_user
+
+  - changeSet:
+      id: 9
+      author: health-dev
+      changes:
+        - addForeignKeyConstraint:
+            baseTableSchemaName: public
+            baseTableName: appointments
+            baseColumnNames: doctor_id
+            referencedTableSchemaName: public
+            referencedTableName: doctors
+            referencedColumnNames: id
+            constraintName: fk_appointments_doctor
+
+  - changeSet:
+      id: 10
+      author: health-dev
+      changes:
+        - addForeignKeyConstraint:
+            baseTableSchemaName: public
+            baseTableName: appointments
+            baseColumnNames: patient_id
+            referencedTableSchemaName: public
+            referencedTableName: patients
+            referencedColumnNames: id
+            constraintName: fk_appointments_patient
+
+  - changeSet:
+      id: 11
+      author: health-dev
+      changes:
+        - addForeignKeyConstraint:
+            baseTableSchemaName: public
+            baseTableName: medical_records
+            baseColumnNames: patient_id
+            referencedTableSchemaName: public
+            referencedTableName: patients
+            referencedColumnNames: id
+            constraintName: fk_medical_records_patient
+
+  - changeSet:
+      id: 12
+      author: health-dev
+      changes:
+        - addForeignKeyConstraint:
+            baseTableSchemaName: public
+            baseTableName: medical_records
+            baseColumnNames: doctor_id
+            referencedTableSchemaName: public
+            referencedTableName: doctors
+            referencedColumnNames: id
+            constraintName: fk_medical_records_doctor

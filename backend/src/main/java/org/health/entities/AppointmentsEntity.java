@@ -6,7 +6,7 @@ import org.health.enums.AppointmentStatusEnum;
 import java.time.ZonedDateTime;
 
 @Entity
-@Table(name = "appointments", schema = "health_schema")
+@Table(name = "appointments")
 public class AppointmentsEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)

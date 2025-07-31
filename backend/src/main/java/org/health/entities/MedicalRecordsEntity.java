@@ -4,7 +4,7 @@ package org.health.entities;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "medical_records", schema = "health_schema")
+@Table(name = "medical_records")
 public class MedicalRecordsEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "patient_id", nullable = false)

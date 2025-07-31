@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 import java.util.List;
 
-@Table(name = "roles", schema = "health_schema")
+@Table(name = "roles")
 @Entity
 public class RolesEntity extends BaseEntity {
     @Column(nullable = false, unique = true)
