@@ -7,13 +7,13 @@ export const RoutesNames = {
   DOCTORS: "doctors",
   ADMIN: "admin",
   PROTECTED_USERS() {
-    return `/${this.PROTECTED}/${this.USERS}`;
+    return `${this.PROTECTED}/${this.USERS}`;
   },
   PROTECTED_DOCTORS() {
-    return `/${this.PROTECTED}/${this.DOCTORS}`;
+    return `${this.PROTECTED}/${this.DOCTORS}`;
   },
   PROTECTED_ADMIN() {
-    return `/${this.PROTECTED}/${this.ADMIN}`;
+    return `${this.PROTECTED}/${this.ADMIN}`;
   }
 } as const;
 

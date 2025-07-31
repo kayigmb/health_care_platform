@@ -72,134 +72,129 @@ const Routes: React.FC = () => {
     { text: "Medical Records", icon: <Folder />, path: "medical-records" }
   ];
 
-  const routers = createBrowserRouter(
-    [
-      {
-        path: RoutesNames.HOME,
-        element: <LayoutPage />,
-        errorElement: <ErrorPage />,
-        children: [
-          {
-            index: true,
-            element: <MainPage />
-          },
-          {
-            element: <ProtectedRoutes />,
-            path: RoutesNames.PROTECTED,
-            children: [
-              {
-                path: RoutesNames.USERS,
-                element: <DashboardLayout sidebarItems={userNavItems} />,
-                children: [
-                  {
-                    index: true,
-                    element: <UserOverviewPage />
-                  },
-                  {
-                    path: "overview",
-                    element: <UserOverviewPage />
-                  },
-                  {
-                    path: "appointments",
-                    element: <AppointmentsUsersPage />
-                  },
-                  {
-                    path: "medical-records",
-                    element: <MedicalRecordsUserPage />
-                  }
-                ]
-              },
-              {
-                path: RoutesNames.DOCTORS,
-                element: <DashboardLayout sidebarItems={doctorNavs.sidebarItems} />,
-                children: [
-                  {
-                    index: true,
-                    element: <DoctorOverviewPage />
-                  },
-                  {
-                    path: "overview",
-                    element: <DoctorOverviewPage />
-                  },
-                  {
-                    path: "patients",
-                    element: <PatientsAdminPage />
-                  },
-                  {
-                    path: "appointments",
-                    element: <AppointmentsDoctorPage />
-                  },
-                  {
-                    path: "medical-records",
-                    element: <MedicalRecordsDoctorPage />
-                  }
-                ]
-              },
-              {
-                path: RoutesNames.ADMIN,
-                element: (
-                  <DashboardLayout
-                    sidebarItems={adminNavs.adminNavItems}
-                    quickActions={adminNavs.quickActions}
-                  />
-                ),
-                children: [
-                  {
-                    index: true,
-                    element: <OverviewPage />
-                  },
-                  {
-                    path: "overview",
-                    element: <OverviewPage />
-                  },
-                  {
-                    path: "users",
-                    element: <UsersAdminPage />
-                  },
-                  {
-                    path: "doctors",
-                    element: <DoctorsAdminPage />
-                  },
-                  {
-                    path: "patients",
-                    element: <PatientsAdminPage />
-                  },
-                  {
-                    path: "appointments",
-                    element: <AppointmentsAdminPage />
-                  },
-                  {
-                    path: "medical-records",
-                    element: <MedicalRecordsPage />
-                  },
-                  {
-                    path: "hospital",
-                    element: <HospitalsAdminPage />
-                  }
-                ]
-              }
-            ]
-          },
-          {
-            element: <AuthLayoutPage />,
-            children: [
-              {
-                path: RoutesNames.REGISTER,
-                element: <RegisterPage />
-              },
-              {
-                path: RoutesNames.LOGIN,
-                element: <LoginPage />
-              }
-            ]
-          }
-        ]
-      }
-    ],
+  const routers = createBrowserRouter([
     {
-      basename: "/"
+      path: RoutesNames.HOME,
+      element: <LayoutPage />,
+      errorElement: <ErrorPage />,
+      children: [
+        {
+          index: true,
+          element: <MainPage />
+        },
+        {
+          element: <ProtectedRoutes />,
+          path: RoutesNames.PROTECTED,
+          children: [
+            {
+              path: RoutesNames.USERS,
+              element: <DashboardLayout sidebarItems={userNavItems} />,
+              children: [
+                {
+                  index: true,
+                  element: <UserOverviewPage />
+                },
+                {
+                  path: "overview",
+                  element: <UserOverviewPage />
+                },
+                {
+                  path: "appointments",
+                  element: <AppointmentsUsersPage />
+                },
+                {
+                  path: "medical-records",
+                  element: <MedicalRecordsUserPage />
+                }
+              ]
+            },
+            {
+              path: RoutesNames.DOCTORS,
+              element: <DashboardLayout sidebarItems={doctorNavs.sidebarItems} />,
+              children: [
+                {
+                  index: true,
+                  element: <DoctorOverviewPage />
+                },
+                {
+                  path: "overview",
+                  element: <DoctorOverviewPage />
+                },
+                {
+                  path: "patients",
+                  element: <PatientsAdminPage />
+                },
+                {
+                  path: "appointments",
+                  element: <AppointmentsDoctorPage />
+                },
+                {
+                  path: "medical-records",
+                  element: <MedicalRecordsDoctorPage />
+                }
+              ]
+            },
+            {
+              path: RoutesNames.ADMIN,
+              element: (
+                <DashboardLayout
+                  sidebarItems={adminNavs.adminNavItems}
+                  quickActions={adminNavs.quickActions}
+                />
+              ),
+              children: [
+                {
+                  index: true,
+                  element: <OverviewPage />
+                },
+                {
+                  path: "overview",
+                  element: <OverviewPage />
+                },
+                {
+                  path: "users",
+                  element: <UsersAdminPage />
+                },
+                {
+                  path: "doctors",
+                  element: <DoctorsAdminPage />
+                },
+                {
+                  path: "patients",
+                  element: <PatientsAdminPage />
+                },
+                {
+                  path: "appointments",
+                  element: <AppointmentsAdminPage />
+                },
+                {
+                  path: "medical-records",
+                  element: <MedicalRecordsPage />
+                },
+                {
+                  path: "hospital",
+                  element: <HospitalsAdminPage />
+                }
+              ]
+            }
+          ]
+        },
+        {
+          element: <AuthLayoutPage />,
+          children: [
+            {
+              path: RoutesNames.REGISTER,
+              element: <RegisterPage />
+            },
+            {
+              path: RoutesNames.LOGIN,
+              element: <LoginPage />
+            }
+          ]
+        }
+      ]
     }
-  );
+  ]);
 
   return <RouterProvider router={routers} />;
 };
