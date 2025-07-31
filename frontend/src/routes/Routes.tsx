@@ -197,7 +197,7 @@ const Routes: React.FC = () => {
       }
     ],
     {
-      basename: "/home"
+      basename: "/"
     }
   );
 
